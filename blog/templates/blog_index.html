@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block page_content %}
+    <h1>Blog Index</h1>
+    <div class="col-md-8 offset-md-2">
+        {% for post in posts %}
+            <h2><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h2>
+            <small>
+                {{ post.created_on.date }} |&nbsp;
+                category:&nbsp;
+                {% for category in post.categories.all %}
+                    <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>&nbsp;
+                {% endfor %}
+            </small>
+            <p>{{ post.body | slice:":400" }}...</p>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</body>
+</html>

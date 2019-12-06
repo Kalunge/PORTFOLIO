@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+    {% block page_content %}
+    <div class="col-md-8 offset-md-2">
+        <h1><a href="{% url 'blog_detail' post.pk %}">{{ post.title }}</a></h1>
+        <small>
+            {{ post.created_on.date }} |&nbsp;
+            category:&nbsp;
+            {% for category in post.categories.all %}
+                <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>&nbsp;
+            {% endfor %}
+        </small>
+        <p>{{ post.body | linebreaks }}</p>
+        <h3>Leave acomment: </h3>
+        <form action="/blog/{{ post.pk }}/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.author }}
+            </div>
+            <div class="form-group">
+                {{ form.body }}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <h3>Comments: </h3>
+        {% for comment in comments %}
+        <p>
+            on {{ comment.created_on.date }}
+             <b>{{ comment.author }}</b> wrote: 
+        </p>
+        <p>{{ comment.body }}</p>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</body>
+</html>
